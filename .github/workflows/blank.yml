@@ -25,7 +25,7 @@ jobs:
 
     - name: Push Docker Image to GitHub Package Registry
       run: docker push ghcr.io/divanomni/ada_python/ada_python/python-app:latest
-
+      
   deploy:
     runs-on: ubuntu-latest
 
