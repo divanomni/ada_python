@@ -27,7 +27,7 @@ jobs:
       run: docker push ghcr.io/divanomni/ada_python/ada_python/python-app:latest
 
     - name: run ssh
-      run: ssh 'divanomni-adapython-eo0ytz6orhg#H7rKbDOCoDRpe8qwkPIhRJFjAKhKi0GF@divanomni-adapython-eo0ytz6orhg.ssh.ws-eu106.gitpod.io'
+      run: ssh -o 'divanomni-adapython-eo0ytz6orhg#H7rKbDOCoDRpe8qwkPIhRJFjAKhKi0GF@divanomni-adapython-eo0ytz6orhg.ssh.ws-eu106.gitpod.io' 'cd/workspace/ada_python && docker compose pull && docker compose up -d' 
       
   deploy:
     runs-on: ubuntu-latest
