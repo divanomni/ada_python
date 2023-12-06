@@ -1,0 +1,42 @@
+name: Docker CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Build Docker Image
+      run: docker build -t ghcr.io/divanomni/ada_python/ada_python/python-app:latest .
+
+    - name: Authenticate to GitHub Package Registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+    - name: Push Docker Image to GitHub Package Registry
+      run: docker push ghcr.io/divanomni/ada_python/ada_python/python-app:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+    - name: Authenticate to GitHub Package Registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+    - name: Pull Docker Image from GitHub Package Registry
+      run: docker pull ghcr.io/divanomni/ada_python/ada_python/python-app:latest
+
+    - name: Run Docker Container
+      run: docker run -d -p 8080:80 ghcr.io/divanomni/ada_python/ada_python/python-app:latest
